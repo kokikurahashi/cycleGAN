@@ -9,6 +9,7 @@ from Utilities.Mydatasets import Mydatasets
 from models.Generator import Generator
 from models.Discriminator import Discriminator
 
+
 beta1 = 0.5
 cycle_late  = 1 #L1LossとadversarilLossの重要度を決定する係数
 num_epochs = 10 #エポック数
