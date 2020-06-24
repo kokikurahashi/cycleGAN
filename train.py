@@ -10,13 +10,13 @@ from models.Generator import Generator
 from models.Discriminator import Discriminator
 
 beta1 = 0.5
-cycle_late  = 1 #L1LossとadversarilLossの重要度を決定する係数
+cycle_late  = 10 #L1LossとadversarilLossの重要度を決定する係数
 num_epochs = 10 #エポック数
 batch_size = 1 #バッチサイズ
 learning_rate = 1e-4 #学習率
 pretrained =True#事前に学習したモデルがあるならそれを使う
-pretrained_model_file_name_list = ['G1_B4','G2_B4','D1_B4','D2_B4']
-output_model_file_name_list    = ['G1_B4','G2_B4','D1_B4','D2_B4']
+pretrained_model_file_name_list = ['G1','G2','D1','D2']
+output_model_file_name_list    = ['G1','G2','D1','D2']
 save_img =True#ネットワークによる生成画像を保存するかどうかのフラグ
 file_path_image1 = "./drive/My Drive/man/sub"
 file_path_image2 = "./drive/My Drive/woman/sub"
@@ -61,7 +61,7 @@ def main():
     D1 = model_init(Discriminator,3,64,project_root+pretrained_model_file_name_list[2]+'.pth',device)
     D2 = model_init(Discriminator,3,64,project_root+pretrained_model_file_name_list[3]+'.pth',device)
 
-    L1Loss = nn.L1Loss()
+    L1Loss = nn.MSELoss()
     MSELoss = nn.MSELoss()
 
     optimizerG1 = torch.optim.Adam(G1.parameters(), lr=learning_rate, betas=(beta1, 0.999), weight_decay=1e-5) 
@@ -155,7 +155,7 @@ def main():
             img_list       = [ image1 , image2 , fake_image1 , fake_image2 , image1_image2_image1 , image2_image1_image2 ]
             img_file_name_list = ['image1','image2','fake_image1','fake_image2','image1_image2_image1','image2_image1_image2']
             
-            if itr % 100==1 and save_img == True:
+            if itr % 100==0 and save_img == True:
               print(epoch,itr, len(dataloader),loss_g_1,loss_g_2,loss_d_1,loss_d_2)
               for i in range(len(img_list)):
                 preserve_result_img(img_list[i],project_root,img_file_name_list[i],itr)
